@@ -100,7 +100,7 @@ function draw() {
     textAlign(CENTER);
     textStyle(ITALIC);
 
-    text("Proyecto Graficacion", width/2, 30);
+    text("Graficacion Unidad 2, Felix Ramirez", width/2, 30);
 
 }
 
