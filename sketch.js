@@ -7,12 +7,14 @@ function setup() {
 
 function draw() {
 
+    noStroke(); // quitar bordes
+
     // FONDO
     if(noche){
         background(20,20,60);
 
-        // ⭐ ESTRELLAS
-        fill(255,255,0);
+        // ⭐ estrellas
+        fill(255,255,150);
         circle(50,50,5);
         circle(100,70,5);
         circle(200,40,5);
@@ -21,12 +23,13 @@ function draw() {
         circle(500,80,5);
         circle(550,40,5);
         circle(250,90,5);
+
     }else{
         background(135,206,235);
     }
 
 
-    // ☀ SOL
+    // SOL
     fill(255,200,0);
     circle(xSol,80,50);
 
@@ -38,17 +41,18 @@ function draw() {
     }
 
 
-    // ☁ NUBES
+    // NUBES (sin borde)
     if(!noche){
+
         fill(255);
 
-        ellipse(150,80,50,40);
-        ellipse(180,80,50,40);
-        ellipse(210,80,50,40);
+        ellipse(150,80,60,40);
+        ellipse(180,70,60,50);
+        ellipse(210,80,60,40);
 
-        ellipse(400,60,50,40);
-        ellipse(430,60,50,40);
-        ellipse(460,60,50,40);
+        ellipse(400,70,60,40);
+        ellipse(430,60,60,50);
+        ellipse(460,70,60,40);
     }
 
 
@@ -57,20 +61,18 @@ function draw() {
     rect(0,300,600,100);
 
 
-    // 🏠 CASA ROSA
+    // CASA ROSA
     fill(255,150,200);
     rect(250,220,100,80);
 
-    // techo
-    fill(180,60,90);
+    fill(200,80,120);
     triangle(250,220,350,220,300,180);
 
-    // puerta
     fill(80,40,20);
     rect(290,250,20,50);
 
 
-    // 🌳 ARBOL
+    // ARBOL
     fill(120,70,20);
     rect(450,240,20,60);
 
@@ -78,33 +80,31 @@ function draw() {
     circle(460,220,60);
 
 
-    // 🌸 FLOR
-
-    // tallo
+    // FLOR
     fill(0,150,0);
     rect(100,270,5,30);
 
-    // pétalos
     fill(255,0,150);
     circle(102,260,15);
     circle(95,265,15);
     circle(110,265,15);
     circle(102,270,15);
 
-    // centro
     fill(255,255,0);
     circle(102,265,10);
 
 
-    // TEXTO
-    fill(0);
-    textSize(16);
-    text("Proyecto Graficacion",10,20);
+    // TEXTO centrado rosa cursiva
+    fill(255,150,200);
+    textSize(20);
+    textAlign(CENTER);
+    textStyle(ITALIC);
+
+    text("Proyecto Graficacion", width/2, 30);
 
 }
 
 
-// INTERACCION
 function mousePressed(){
     noche = !noche;
 }
