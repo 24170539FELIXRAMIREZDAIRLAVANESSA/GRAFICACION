@@ -1,110 +1,93 @@
-let xSol = 0;
-let noche = false;
+let angulo = 0;
+let escala = 1;
+
+let estrellas = [];
 
 function setup() {
-    createCanvas(600,400);
+    createCanvas(600, 400, WEBGL);
+
+    // generar estrellas aleatorias
+    for(let i = 0; i < 100; i++){
+        estrellas.push({
+            x: random(-500,500),
+            y: random(-500,500),
+            z: random(-500,500)
+        });
+    }
 }
 
 function draw() {
 
-    noStroke(); // quitar bordes
+    background(180, 200, 255);
 
-    // FONDO
-    if(noche){
-        background(20,20,60);
+    // mover cámara con mouse
+    orbitControl();
 
-        // ⭐ estrellas
-        fill(255,255,150);
-        circle(50,50,5);
-        circle(100,70,5);
-        circle(200,40,5);
-        circle(300,60,5);
-        circle(400,30,5);
-        circle(500,80,5);
-        circle(550,40,5);
-        circle(250,90,5);
+    // luces
+    ambientLight(150);
+    directionalLight(255,255,255, 0,0,-1);
 
-    }else{
-        background(135,206,235);
+    // ⭐ ESTRELLAS 3D
+    push();
+    fill(255,255,200);
+    noStroke();
+    for(let e of estrellas){
+        push();
+        translate(e.x, e.y, e.z);
+        sphere(2);
+        pop();
     }
+    pop();
 
 
-    // SOL
-    fill(255,200,0);
-    circle(xSol,80,50);
-
-    xSol++;
-
-    if(xSol > width){
-        xSol = 0;
-        noche = !noche;
-    }
+    // PISO
+    push();
+    rotateX(HALF_PI);
+    translate(0, 200, 0);
+    fill(200,255,200);
+    plane(800,800);
+    pop();
 
 
-    // NUBES (sin borde)
-    if(!noche){
-
-        fill(255);
-
-        ellipse(150,80,60,40);
-        ellipse(180,70,60,50);
-        ellipse(210,80,60,40);
-
-        ellipse(400,70,60,40);
-        ellipse(430,60,60,50);
-        ellipse(460,70,60,40);
-    }
-
-
-    // SUELO
-    fill(50,180,70);
-    rect(0,300,600,100);
-
-
-    // CASA ROSA
+    // 💗 CUBO GIRANDO (principal)
+    push();
+    rotateX(angulo);
+    rotateY(angulo);
     fill(255,150,200);
-    rect(250,220,100,80);
-
-    fill(200,80,120);
-    triangle(250,220,350,220,300,180);
-
-    fill(80,40,20);
-    rect(290,250,20,50);
+    box(100);
+    pop();
 
 
-    // ARBOL
-    fill(120,70,20);
-    rect(450,240,20,60);
-
-    fill(0,150,0);
-    circle(460,220,60);
-
-
-    // FLOR
-    fill(0,150,0);
-    rect(100,270,5,30);
-
-    fill(255,0,150);
-    circle(102,260,15);
-    circle(95,265,15);
-    circle(110,265,15);
-    circle(102,270,15);
-
-    fill(255,255,0);
-    circle(102,265,10);
+    // 🔵 ESFERA
+    push();
+    translate(-200, 0, 0);
+    fill(150,200,255);
+    sphere(60);
+    pop();
 
 
-    // TEXTO centrado rosa cursiva
-    fill(255,150,200);
-    textSize(20);
-    textAlign(CENTER);
-    textStyle(ITALIC);
+    // 🟠 CONO
+    push();
+    translate(200, 0, 0);
+    rotateX(angulo);
+    fill(255,200,150);
+    cone(50,100);
+    pop();
 
-    text("Graficacion Unidad 2, Felix Ramirez", width/2, 30);
 
+    // animación
+    angulo += 0.02;
 }
 
 
-function mousePressed(){
-    noche = !noche;
+// 🎮 INTERACCION CON TECLADO
+function keyPressed(){
+
+    if(key === 'A'){
+        escala += 0.1;
+    }
+
+    if(key === 'D'){
+        escala -= 0.1;
+    }
 }
