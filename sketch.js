@@ -1,93 +1,166 @@
 let angulo = 0;
-let escala = 1;
 
 let estrellas = [];
 
-function setup() {
-    createCanvas(600, 400, WEBGL);
+let fondoR = 15;
+let fondoG = 10;
+let fondoB = 35;
 
-    // generar estrellas aleatorias
-    for(let i = 0; i < 100; i++){
+function setup() {
+
+    createCanvas(800, 600, WEBGL);
+
+    // estrellas
+    for(let i = 0; i < 200; i++){
+
         estrellas.push({
-            x: random(-500,500),
-            y: random(-500,500),
-            z: random(-500,500)
+            x: random(-1000,1000),
+            y: random(-1000,1000),
+            z: random(-1000,1000),
+            size: random(1,4)
         });
     }
 }
 
 function draw() {
 
-    background(180, 200, 255);
+    background(fondoR, fondoG, fondoB);
 
-    // mover cámara con mouse
+    // mover camara
     orbitControl();
 
-    // luces
-    ambientLight(150);
-    directionalLight(255,255,255, 0,0,-1);
 
-    // ⭐ ESTRELLAS 3D
+    // 🌌 LUCES
+
+    // luz ambiental
+    ambientLight(80);
+
+    // luz direccional azul
+    directionalLight(150, 180, 255, 1, 1, -1);
+
+    // luz rosa
+    pointLight(255, 100, 200, 0, 0, 300);
+
+    // luz morada
+    pointLight(180, 100, 255, -300, -200, 200);
+
+
+    // ✨ ESTRELLAS
     push();
-    fill(255,255,200);
+
     noStroke();
+
     for(let e of estrellas){
+
         push();
+
         translate(e.x, e.y, e.z);
-        sphere(2);
+
+        ambientMaterial(255,255,255);
+
+        sphere(e.size);
+
         pop();
     }
+
     pop();
 
 
-    // PISO
-    push();
-    rotateX(HALF_PI);
-    translate(0, 200, 0);
-    fill(200,255,200);
-    plane(800,800);
-    pop();
 
-
-    // 💗 CUBO GIRANDO (principal)
+    // 💖 ESFERA ROSA
     push();
-    rotateX(angulo);
+
     rotateY(angulo);
-    fill(255,150,200);
-    box(100);
+
+    translate(-220, 0, 0);
+
+    specularMaterial(255,150,220);
+
+    sphere(80);
+
     pop();
 
 
-    // 🔵 ESFERA
-    push();
-    translate(-200, 0, 0);
-    fill(150,200,255);
-    sphere(60);
-    pop();
 
-
-    // 🟠 CONO
+    // 💙 TOROIDE AZUL
     push();
-    translate(200, 0, 0);
+
     rotateX(angulo);
-    fill(255,200,150);
-    cone(50,100);
+
+    rotateY(angulo);
+
+    translate(220, 0, 0);
+
+    ambientMaterial(150,200,255);
+
+    torus(80,25);
+
     pop();
 
 
-    // animación
-    angulo += 0.02;
+
+    // 💜 CONO CENTRAL
+    push();
+
+    rotateZ(angulo);
+
+    rotateX(angulo);
+
+    normalMaterial();
+
+    cone(90,160);
+
+    pop();
+
+
+
+    // 🌸 MINI ESFERAS FLOTANTES
+    for(let i = 0; i < 6; i++){
+
+        push();
+
+        rotateY(angulo + i);
+
+        translate(0, sin(frameCount * 0.02 + i) * 100, 250);
+
+        ambientMaterial(255,180,220);
+
+        sphere(20);
+
+        pop();
+    }
+
+
+
+    // 🌙 PISO GALAXIA
+    push();
+
+    rotateX(HALF_PI);
+
+    translate(0,300,0);
+
+    ambientMaterial(80,50,120);
+
+    plane(2000,2000);
+
+    pop();
+
+
+
+    // animacion
+    angulo += 0.01;
 }
 
 
-// 🎮 INTERACCION CON TECLADO
+
+// 🎮 INTERACCION TECLADO
 function keyPressed(){
 
-    if(key === 'A'){
-        escala += 0.1;
-    }
+    // cambiar colores fondo
+    if(key === 'F'){
 
-    if(key === 'D'){
-        escala -= 0.1;
+        fondoR = random(0,50);
+        fondoG = random(0,50);
+        fondoB = random(40,100);
     }
 }
