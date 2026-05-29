@@ -1,64 +1,48 @@
+let trail = [];
+
 let angulo = 0;
-
-let estrellas = [];
-
-let fondoR = 15;
-let fondoG = 10;
-let fondoB = 35;
 
 function setup() {
 
-    createCanvas(800, 600, WEBGL);
-
-    // estrellas
-    for(let i = 0; i < 200; i++){
-
-        estrellas.push({
-            x: random(-1000,1000),
-            y: random(-1000,1000),
-            z: random(-1000,1000),
-            size: random(1,4)
-        });
-    }
+    createCanvas(900, 600, WEBGL);
 }
 
 function draw() {
 
-    background(fondoR, fondoG, fondoB);
+    background(10, 10, 30);
 
-    // mover camara
     orbitControl();
 
 
-    // 🌌 LUCES
+    // ✨ ILUMINACION
 
-    // luz ambiental
-    ambientLight(80);
+    ambientLight(60);
 
-    // luz direccional azul
-    directionalLight(150, 180, 255, 1, 1, -1);
+    directionalLight(180, 180, 255, 1, 1, -1);
 
-    // luz rosa
-    pointLight(255, 100, 200, 0, 0, 300);
-
-    // luz morada
-    pointLight(180, 100, 255, -300, -200, 200);
+    pointLight(255, 120, 220, 0, 0, 300);
 
 
-    // ✨ ESTRELLAS
+
+    // ⭐ ESTRELLAS
+
     push();
 
-    noStroke();
-
-    for(let e of estrellas){
+    for(let i = 0; i < 100; i++){
 
         push();
 
-        translate(e.x, e.y, e.z);
+        translate(
+            sin(i * 50) * 800,
+            cos(i * 100) * 800,
+            sin(i * 200) * 800
+        );
 
-        ambientMaterial(255,255,255);
+        ambientMaterial(255);
 
-        sphere(e.size);
+        noStroke();
+
+        sphere(2);
 
         pop();
     }
@@ -67,77 +51,86 @@ function draw() {
 
 
 
-    // 💖 ESFERA ROSA
+    // 💖 ESFERA PRINCIPAL
+
+    let x = sin(frameCount * 0.02) * 250;
+    let y = cos(frameCount * 0.03) * 120;
+    let z = sin(frameCount * 0.01) * 200;
+
+    trail.push({x, y, z});
+
+    if(trail.length > 40){
+        trail.shift();
+    }
+
+
+
+    // 🌸 GHOST FRAMES / TRAILS
+
+    for(let i = 0; i < trail.length; i++){
+
+        let alpha = map(i, 0, trail.length, 20, 255);
+
+        push();
+
+        translate(
+            trail[i].x,
+            trail[i].y,
+            trail[i].z
+        );
+
+        specularMaterial(255,150,220, alpha);
+
+        noStroke();
+
+        sphere(50);
+
+        pop();
+    }
+
+
+
+    // 💙 CUBO GIRANDO
+
     push();
 
-    rotateY(angulo);
+    rotateX(frameCount * 0.01);
 
-    translate(-220, 0, 0);
+    rotateY(frameCount * 0.02);
 
-    specularMaterial(255,150,220);
-
-    sphere(80);
-
-    pop();
-
-
-
-    // 💙 TOROIDE AZUL
-    push();
-
-    rotateX(angulo);
-
-    rotateY(angulo);
-
-    translate(220, 0, 0);
+    translate(-300, 0, 0);
 
     ambientMaterial(150,200,255);
 
-    torus(80,25);
+    box(120);
 
     pop();
 
 
 
-    // 💜 CONO CENTRAL
+    // 💜 TOROIDE
+
     push();
 
-    rotateZ(angulo);
+    translate(300, 0, 0);
 
-    rotateX(angulo);
+    rotateZ(frameCount * 0.03);
 
     normalMaterial();
 
-    cone(90,160);
+    torus(80, 20);
 
     pop();
 
 
 
-    // 🌸 MINI ESFERAS FLOTANTES
-    for(let i = 0; i < 6; i++){
+    // 🌙 PISO
 
-        push();
-
-        rotateY(angulo + i);
-
-        translate(0, sin(frameCount * 0.02 + i) * 100, 250);
-
-        ambientMaterial(255,180,220);
-
-        sphere(20);
-
-        pop();
-    }
-
-
-
-    // 🌙 PISO GALAXIA
     push();
 
     rotateX(HALF_PI);
 
-    translate(0,300,0);
+    translate(0, 300, 0);
 
     ambientMaterial(80,50,120);
 
@@ -147,20 +140,19 @@ function draw() {
 
 
 
-    // animacion
-    angulo += 0.01;
-}
+    // ✨ TEXTO
 
+    push();
 
+    translate(-350, -250, 0);
 
-// 🎮 INTERACCION TECLADO
-function keyPressed(){
+    fill(255,180,220);
 
-    // cambiar colores fondo
-    if(key === 'F'){
+    textSize(24);
 
-        fondoR = random(0,50);
-        fondoG = random(0,50);
-        fondoB = random(40,100);
-    }
+    textStyle(ITALIC);
+
+    text("Galaxy Motion Scene", 0, 0);
+
+    pop();
 }
